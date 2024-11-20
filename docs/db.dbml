@@ -1,0 +1,121 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+// Or, view in VSCode with extension: "DBML Live Preview"
+
+Project DBML {
+  Note: '''
+Approver: Approvers for expense reports.
+ExpenseReport: Reports summarizing user expenses.
+User: Users who submit expenses.
+Budget: Budgets linked to departments.
+Department: Departments that users can belong to.
+Category: Categories for classifying expenses.
+Expense: Individual expenses reported by users.
+Invoice: Invoices associated with expenses.
+PaymentMethod: Payment methods used for expenses.
+Policy: Policies associated with expenses.
+Receipt: Receipts linked to expenses.
+Vendor: Vendors associated with receipts.
+'''
+}
+
+Table Approver {
+    id INTEGER [primary key]
+    user_id INTEGER 
+    expense_report_id INTEGER 
+    status VARCHAR(100) 
+    }
+
+Table ExpenseReport {
+    id INTEGER [primary key]
+    user_id INTEGER 
+    report_date DATE 
+    total_expense INTEGER 
+    }
+
+Table User {
+    id INTEGER [primary key]
+    username VARCHAR(50) 
+    email VARCHAR(100) 
+    }
+
+Table Budget {
+    id INTEGER [primary key]
+    department_id INTEGER 
+    fiscal_year INTEGER 
+    allocated_amount INTEGER 
+    spent_amount INTEGER 
+    }
+
+Table Department {
+    id INTEGER [primary key]
+    name VARCHAR(100) 
+    manager_id INTEGER 
+    }
+
+Table Category {
+    id INTEGER [primary key]
+    name VARCHAR(100) 
+    }
+
+Table Expense {
+    id INTEGER [primary key]
+    user_id INTEGER 
+    amount INTEGER 
+    description VARCHAR(200) 
+    date DATE 
+    category_id INTEGER 
+    }
+
+Table Invoice {
+    id INTEGER [primary key]
+    expense_id INTEGER 
+    issued_date DATE 
+    due_date DATE 
+    amount_due INTEGER 
+    paid_status VARCHAR(50) 
+    }
+
+Table PaymentMethod {
+    id INTEGER [primary key]
+    Type VARCHAR(50) 
+    details VARCHAR(200) 
+    user_id INTEGER 
+    }
+
+Table Policy {
+    id INTEGER [primary key]
+    name VARCHAR(100) 
+    description VARCHAR(300) 
+    effective_from DATE 
+    user_id INTEGER 
+    }
+
+Table Receipt {
+    id INTEGER [primary key]
+    expense_id INTEGER 
+    receipt_date DATE 
+    vendor VARCHAR(200) 
+    total_amount INTEGER 
+    }
+
+Table Vendor {
+    id INTEGER [primary key]
+    name VARCHAR(150) 
+    contact_info VARCHAR(200) 
+    }
+
+
+
+// Relationships
+    Ref: Approver.(expense_report_id) < ExpenseReport.(id)
+    Ref: Approver.(user_id) < User.(id)
+    Ref: ExpenseReport.(user_id) < User.(id)
+    Ref: Budget.(department_id) < Department.(id)
+    Ref: Department.(manager_id) < User.(id)
+    Ref: Expense.(category_id) < Category.(id)
+    Ref: Expense.(user_id) < User.(id)
+    Ref: Invoice.(expense_id) < Expense.(id)
+    Ref: PaymentMethod.(user_id) < User.(id)
+    Ref: Policy.(user_id) < User.(id)
+    Ref: Receipt.(expense_id) < Expense.(id)

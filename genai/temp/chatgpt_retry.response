@@ -1,0 +1,79 @@
+{
+    "models": [
+        {
+            "classname": "User",
+            "code": "class User(Base):\n    \"\"\"description: Users who submit expenses.\"\"\"\n    __tablename__ = 'user'\n\n    id = Column(Integer, primary_key=True)\n    username = Column(String(50), nullable=False)\n    email = Column(String(100), nullable=False)\n",
+            "description": "Users who submit expenses.",
+            "name": "User"
+        },
+        {
+            "classname": "Expense",
+            "code": "class Expense(Base):\n    \"\"\"description: Individual expenses reported by users.\"\"\"\n    __tablename__ = 'expense'\n\n    id = Column(Integer, primary_key=True)\n    user_id = Column(Integer, ForeignKey('user.id'))\n    amount = Column(Integer, nullable=False)\n    description = Column(String(200), nullable=True)\n    date = Column(Date, nullable=False)\n    category_id = Column(Integer, ForeignKey('category.id'))\n",
+            "description": "Individual expenses reported by users.",
+            "name": "Expense"
+        },
+        {
+            "classname": "Category",
+            "code": "class Category(Base):\n    \"\"\"description: Categories for classifying expenses.\"\"\"\n    __tablename__ = 'category'\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100), nullable=False)\n",
+            "description": "Categories for classifying expenses.",
+            "name": "Category"
+        },
+        {
+            "classname": "Receipt",
+            "code": "class Receipt(Base):\n    \"\"\"description: Receipts linked to expenses.\"\"\"\n    __tablename__ = 'receipt'\n\n    id = Column(Integer, primary_key=True)\n    expense_id = Column(Integer, ForeignKey('expense.id'))\n    receipt_date = Column(Date, nullable=False)\n    vendor = Column(String(200), nullable=True)\n    total_amount = Column(Integer, nullable=False)\n",
+            "description": "Receipts linked to expenses.",
+            "name": "Receipt"
+        },
+        {
+            "classname": "Vendor",
+            "code": "class Vendor(Base):\n    \"\"\"description: Vendors associated with receipts.\"\"\"\n    __tablename__ = 'vendor'\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(150), nullable=False)\n    contact_info = Column(String(200), nullable=True)\n",
+            "description": "Vendors associated with receipts.",
+            "name": "Vendor"
+        },
+        {
+            "classname": "PaymentMethod",
+            "code": "class PaymentMethod(Base):\n    \"\"\"description: Payment methods used for expenses.\"\"\"\n    __tablename__ = 'payment_method'\n\n    id = Column(Integer, primary_key=True)\n    type = Column(String(50), nullable=False)\n    details = Column(String(200), nullable=True)\n    user_id = Column(Integer, ForeignKey('user.id'))\n",
+            "description": "Payment methods used for expenses.",
+            "name": "PaymentMethod"
+        },
+        {
+            "classname": "Invoice",
+            "code": "class Invoice(Base):\n    \"\"\"description: Invoices associated with expenses.\"\"\"\n    __tablename__ = 'invoice'\n\n    id = Column(Integer, primary_key=True)\n    expense_id = Column(Integer, ForeignKey('expense.id'))\n    issued_date = Column(Date, nullable=False)\n    due_date = Column(Date, nullable=False)\n    amount_due = Column(Integer, nullable=False)\n    paid_status = Column(String(50), nullable=False)\n",
+            "description": "Invoices associated with expenses.",
+            "name": "Invoice"
+        },
+        {
+            "classname": "ExpenseReport",
+            "code": "class ExpenseReport(Base):\n    \"\"\"description: Reports summarizing user expenses.\"\"\"\n    __tablename__ = 'expense_report'\n\n    id = Column(Integer, primary_key=True)\n    user_id = Column(Integer, ForeignKey('user.id'))\n    report_date = Column(Date, nullable=False)\n    total_expense = Column(Integer, nullable=False)\n",
+            "description": "Reports summarizing user expenses.",
+            "name": "ExpenseReport"
+        },
+        {
+            "classname": "Department",
+            "code": "class Department(Base):\n    \"\"\"description: Departments that users can belong to.\"\"\"\n    __tablename__ = 'department'\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100), nullable=False)\n    manager_id = Column(Integer, ForeignKey('user.id'))\n",
+            "description": "Departments that users can belong to.",
+            "name": "Department"
+        },
+        {
+            "classname": "Policy",
+            "code": "class Policy(Base):\n    \"\"\"description: Policies associated with expenses.\"\"\"\n    __tablename__ = 'policy'\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(100), nullable=False)\n    description = Column(String(300), nullable=True)\n    effective_from = Column(Date, nullable=False)\n    user_id = Column(Integer, ForeignKey('user.id'))\n",
+            "description": "Policies associated with expenses.",
+            "name": "Policy"
+        },
+        {
+            "classname": "Approver",
+            "code": "class Approver(Base):\n    \"\"\"description: Approvers for expense reports.\"\"\"\n    __tablename__ = 'approver'\n\n    id = Column(Integer, primary_key=True)\n    user_id = Column(Integer, ForeignKey('user.id'))\n    expense_report_id = Column(Integer, ForeignKey('expense_report.id'))\n    status = Column(String(100), nullable=False)\n",
+            "description": "Approvers for expense reports.",
+            "name": "Approver"
+        },
+        {
+            "classname": "Budget",
+            "code": "class Budget(Base):\n    \"\"\"description: Budgets linked to departments.\"\"\"\n    __tablename__ = 'budget'\n\n    id = Column(Integer, primary_key=True)\n    department_id = Column(Integer, ForeignKey('department.id'))\n    fiscal_year = Column(Integer, nullable=False)\n    allocated_amount = Column(Integer, nullable=False)\n    spent_amount = Column(Integer, nullable=False)\n",
+            "description": "Budgets linked to departments.",
+            "name": "Budget"
+        }
+    ],
+    "rules": [],
+    "test_data": "# Creating test data for User\ntest_user_1 = User(id=1, username='jdoe', email='jdoe@example.com')\ntest_user_2 = User(id=2, username='asmith', email='asmith@example.com')\ntest_user_3 = User(id=3, username='mjones', email='mjones@example.com')\ntest_user_4 = User(id=4, username='rwilliams', email='rwilliams@example.com')\n\n# Creating test data for Category\ntest_category_1 = Category(id=1, name='Travel')\ntest_category_2 = Category(id=2, name='Office Supplies')\ntest_category_3 = Category(id=3, name='Meals')\ntest_category_4 = Category(id=4, name='Utilities')\n\n# Creating test data for Expense\ntest_expense_1 = Expense(id=1, user_id=1, amount=200, description='Flight booking', date=date(2023, 5, 10), category_id=1)\ntest_expense_2 = Expense(id=2, user_id=1, amount=50, description='Printing papers', date=date(2023, 4, 15), category_id=2)\ntest_expense_3 = Expense(id=3, user_id=2, amount=30, description='Lunch with client', date=date(2023, 6, 5), category_id=3)\ntest_expense_4 = Expense(id=4, user_id=2, amount=120, description='Phone bill', date=date(2023, 7, 20), category_id=4)\n\n# Creating test data for Receipt\ntest_receipt_1 = Receipt(id=1, expense_id=1, receipt_date=date(2023, 5, 11), vendor='Airline Inc.', total_amount=200)\ntest_receipt_2 = Receipt(id=2, expense_id=2, receipt_date=date(2023, 4, 16), vendor='Office Depot', total_amount=50)\ntest_receipt_3 = Receipt(id=3, expense_id=3, receipt_date=date(2023, 6, 6), vendor='Bistro Caf\u00e9', total_amount=30)\ntest_receipt_4 = Receipt(id=4, expense_id=4, receipt_date=date(2023, 7, 21), vendor='Telecom Corp.', total_amount=120)\n\n# Creating test data for Vendor\ntest_vendor_1 = Vendor(id=1, name='Airline Inc.', contact_info='info@airline.com')\ntest_vendor_2 = Vendor(id=2, name='Office Depot', contact_info='contact@officedepot.com')\ntest_vendor_3 = Vendor(id=3, name='Bistro Caf\u00e9', contact_info='reservations@bistrocafe.com')\ntest_vendor_4 = Vendor(id=4, name='Telecom Corp.', contact_info='support@telecomcorp.com')\n\n# Creating test data for PaymentMethod\ntest_payment_method_1 = PaymentMethod(id=1, type='Credit Card', details='Visa ending in 1234', user_id=1)\ntest_payment_method_2 = PaymentMethod(id=2, type='Bank Transfer', details='Account ending in 7890', user_id=2)\ntest_payment_method_3 = PaymentMethod(id=3, type='PayPal', details='primary account', user_id=3)\ntest_payment_method_4 = PaymentMethod(id=4, type='Cash', details='n/a', user_id=4)\n\n# Creating test data for Invoice\ntest_invoice_1 = Invoice(id=1, expense_id=1, issued_date=date(2023, 5, 12), due_date=date(2023, 5, 22), amount_due=200, paid_status='Paid')\ntest_invoice_2 = Invoice(id=2, expense_id=2, issued_date=date(2023, 4, 17), due_date=date(2023, 4, 27), amount_due=50, paid_status='Unpaid')\ntest_invoice_3 = Invoice(id=3, expense_id=3, issued_date=date(2023, 6, 7), due_date=date(2023, 6, 17), amount_due=30, paid_status='Paid')\ntest_invoice_4 = Invoice(id=4, expense_id=4, issued_date=date(2023, 7, 22), due_date=date(2023, 8, 1), amount_due=120, paid_status='Unpaid')\n\n# Creating test data for ExpenseReport\ntest_expense_report_1 = ExpenseReport(id=1, user_id=1, report_date=date(2023, 6, 1), total_expense=250)\ntest_expense_report_2 = ExpenseReport(id=2, user_id=2, report_date=date(2023, 7, 1), total_expense=150)\ntest_expense_report_3 = ExpenseReport(id=3, user_id=3, report_date=date(2023, 8, 1), total_expense=0)\ntest_expense_report_4 = ExpenseReport(id=4, user_id=4, report_date=date(2023, 9, 1), total_expense=0)\n\n# Creating test data for Department\ntest_department_1 = Department(id=1, name='Finance', manager_id=1)\ntest_department_2 = Department(id=2, name='Marketing', manager_id=2)\ntest_department_3 = Department(id=3, name='IT', manager_id=3)\ntest_department_4 = Department(id=4, name='HR', manager_id=4)\n\n# Creating test data for Policy\ntest_policy_1 = Policy(id=1, name='Travel Policy', description='Policy regarding travel expenses', effective_from=date(2023, 1, 1), user_id=1)\ntest_policy_2 = Policy(id=2, name='Office Supplies Policy', description='Policy regarding office supplies', effective_from=date(2023, 2, 1), user_id=2)\ntest_policy_3 = Policy(id=3, name='Food Policy', description='Policy regarding meals during work', effective_from=date(2023, 3, 1), user_id=3)\ntest_policy_4 = Policy(id=4, name='Utility Policy', description='Policy regarding utility usage', effective_from=date(2023, 4, 1), user_id=4)\n\n# Creating test data for Approver\ntest_approver_1 = Approver(id=1, user_id=1, expense_report_id=1, status='Approved')\ntest_approver_2 = Approver(id=2, user_id=2, expense_report_id=2, status='Pending')\ntest_approver_3 = Approver(id=3, user_id=3, expense_report_id=3, status='Rejected')\ntest_approver_4 = Approver(id=4, user_id=4, expense_report_id=4, status='Approved')\n\n# Creating test data for Budget\ntest_budget_1 = Budget(id=1, department_id=1, fiscal_year=2023, allocated_amount=50000, spent_amount=10000)\ntest_budget_2 = Budget(id=2, department_id=2, fiscal_year=2023, allocated_amount=30000, spent_amount=5000)\ntest_budget_3 = Budget(id=3, department_id=3, fiscal_year=2023, allocated_amount=40000, spent_amount=0)\ntest_budget_4 = Budget(id=4, department_id=4, fiscal_year=2023, allocated_amount=20000, spent_amount=2000)",
+    "name": "ExpenseTracker"
+}

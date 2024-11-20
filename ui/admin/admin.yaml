@@ -1,0 +1,349 @@
+about:
+  date: November 20, 2024 03:56:40
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 11
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Approver:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: expense_report_id
+    - name: user_id
+    - name: status
+      required: true
+    description: Approvers for expense reports.
+    info_list: Approvers for expense reports.
+    tab_groups:
+    - direction: toone
+      fks:
+      - expense_report_id
+      name: expense_report
+      resource: ExpenseReport
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: Approver
+    user_key: id
+  Budget:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: department_id
+    - name: fiscal_year
+      required: true
+    - name: allocated_amount
+      required: true
+    - name: spent_amount
+      required: true
+    description: Budgets linked to departments.
+    info_list: Budgets linked to departments.
+    tab_groups:
+    - direction: toone
+      fks:
+      - department_id
+      name: department
+      resource: Department
+    type: Budget
+    user_key: id
+  Category:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: id
+    description: Categories for classifying expenses.
+    info_list: Categories for classifying expenses.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - category_id
+      name: ExpenseList
+      resource: Expense
+    type: Category
+    user_key: name
+  Department:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: manager_id
+    - name: id
+    description: Departments that users can belong to.
+    info_list: Departments that users can belong to.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - department_id
+      name: BudgetList
+      resource: Budget
+    - direction: toone
+      fks:
+      - manager_id
+      name: manager
+      resource: User
+    type: Department
+    user_key: name
+  Expense:
+    attributes:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+    - name: category_id
+    - name: user_id
+    - name: amount
+      required: true
+    - name: date
+      required: true
+      type: DATE
+    - name: id
+    description: Individual expenses reported by users.
+    info_list: Individual expenses reported by users.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - expense_id
+      name: InvoiceList
+      resource: Invoice
+    - direction: tomany
+      fks:
+      - expense_id
+      name: ReceiptList
+      resource: Receipt
+    - direction: toone
+      fks:
+      - category_id
+      name: category
+      resource: Category
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: Expense
+    user_key: description
+  ExpenseReport:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: user_id
+    - name: report_date
+      required: true
+      type: DATE
+    - name: total_expense
+      required: true
+    description: Reports summarizing user expenses.
+    info_list: Reports summarizing user expenses.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - expense_report_id
+      name: ApproverList
+      resource: Approver
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: ExpenseReport
+    user_key: id
+  Invoice:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: expense_id
+    - name: issued_date
+      required: true
+      type: DATE
+    - name: due_date
+      required: true
+      type: DATE
+    - name: amount_due
+      required: true
+    - name: paid_status
+      required: true
+    description: Invoices associated with expenses.
+    info_list: Invoices associated with expenses.
+    tab_groups:
+    - direction: toone
+      fks:
+      - expense_id
+      name: expense
+      resource: Expense
+    type: Invoice
+    user_key: id
+  PaymentMethod:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: user_id
+    - name: Type
+      required: true
+    - name: details
+    description: Payment methods used for expenses.
+    info_list: Payment methods used for expenses.
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: PaymentMethod
+    user_key: id
+  Policy:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: user_id
+    - name: description
+    - name: effective_from
+      required: true
+      type: DATE
+    - name: id
+    description: Policies associated with expenses.
+    info_list: Policies associated with expenses.
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: Policy
+    user_key: name
+  Receipt:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: expense_id
+    - name: receipt_date
+      required: true
+      type: DATE
+    - name: vendor
+    - name: total_amount
+      required: true
+    description: Receipts linked to expenses.
+    info_list: Receipts linked to expenses.
+    tab_groups:
+    - direction: toone
+      fks:
+      - expense_id
+      name: expense
+      resource: Expense
+    type: Receipt
+    user_key: id
+  User:
+    attributes:
+    - label: ' username*'
+      name: username
+      required: true
+      search: true
+      sort: true
+    - name: email
+      required: true
+    - name: id
+    description: Users who submit expenses.
+    info_list: Users who submit expenses.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - user_id
+      name: ApproverList
+      resource: Approver
+    - direction: tomany
+      fks:
+      - manager_id
+      name: DepartmentList
+      resource: Department
+    - direction: tomany
+      fks:
+      - user_id
+      name: ExpenseList
+      resource: Expense
+    - direction: tomany
+      fks:
+      - user_id
+      name: ExpenseReportList
+      resource: ExpenseReport
+    - direction: tomany
+      fks:
+      - user_id
+      name: PaymentMethodList
+      resource: PaymentMethod
+    - direction: tomany
+      fks:
+      - user_id
+      name: PolicyList
+      resource: Policy
+    type: User
+    user_key: username
+  Vendor:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: contact_info
+    - name: id
+    description: Vendors associated with receipts.
+    info_list: Vendors associated with receipts.
+    type: Vendor
+    user_key: name
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

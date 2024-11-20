@@ -1,0 +1,51 @@
+<o-form-layout-manager attr="Approver" mode="tab" title="APPROVER">
+    <div fxFill fxLayout="column" fxLayoutAlign="start">
+        <o-table 
+            attr="ApproverTable" 
+            service="Approver" 
+            entity="Approver" 
+            title="APPROVER"
+            keys="id"
+            columns="id;expense_report_id;user_id;status" 
+            header-actions="R;D"
+            visible-columns="id;expense_report_id;user_id;status"  
+            sort-columns="id" 
+            query-rows="20" 
+            quick-filter="yes"
+            row-height="medium" 
+            select-all-checkbox="true" 
+            pageable="yes"  
+            auto-adjust="true" 
+            virtual-scroll="yes" 
+            edition-mode="dblclick"
+            horizontal-scroll="yes"
+            show-title="yes"
+            export-button="yes">
+            
+            <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            
+            <o-table-column attr="expense_report_id" title="expense_report_id">
+    <o-table-cell-renderer-service attr="expense_report_id" 
+        service="ExpenseReport" entity="ExpenseReportType" columns="id;id"
+        parent-keys="id:expense_report_id"
+        value-column="id" keys="expense_report_id"
+        visible-columns="id" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-table-column attr="user_id" title="user_id">
+    <o-table-cell-renderer-service attr="user_id" 
+        service="User" entity="UserType" columns="id;username"
+        parent-keys="id:user_id"
+        value-column="username" keys="user_id"
+        visible-columns="username" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-table-column #status attr="status" title="status" editable="no" required="yes" content-align="left"></o-table-column>
+            
+            <o-table-context-menu></o-table-context-menu>
+            <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
+        </o-table>
+    </div>
+</o-form-layout-manager>

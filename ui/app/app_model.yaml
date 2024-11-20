@@ -1,0 +1,539 @@
+about:
+  date: November 20, 2024 03:56:40
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+entities:
+  Approver:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: expense_report_id
+      template: integer
+      type: INTEGER
+    - name: user_id
+      template: integer
+      type: INTEGER
+    - name: status
+      required: true
+      template: text
+      type: VARCHAR(100)
+    description: Approvers for expense reports.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    hidden: {}
+    home_template: home_template.html
+    info_list: Approvers for expense reports.
+    label: Approver
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - expense_report_id
+      name: expense_report
+      resource: ExpenseReport
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: Approver
+  Budget:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: department_id
+      template: integer
+      type: INTEGER
+    - name: fiscal_year
+      required: true
+      template: integer
+      type: INTEGER
+    - name: allocated_amount
+      required: true
+      template: integer
+      type: INTEGER
+    - name: spent_amount
+      required: true
+      template: integer
+      type: INTEGER
+    description: Budgets linked to departments.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    hidden: {}
+    home_template: home_template.html
+    info_list: Budgets linked to departments.
+    label: Budget
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - department_id
+      name: department
+      resource: Department
+    type: Budget
+  Category:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(100)
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Categories for classifying expenses.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    hidden: {}
+    home_template: home_template.html
+    info_list: Categories for classifying expenses.
+    label: Category
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - category_id
+      name: ExpenseList
+      resource: Expense
+    type: Category
+  Department:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(100)
+    - name: manager_id
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Departments that users can belong to.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    hidden: {}
+    home_template: home_template.html
+    info_list: Departments that users can belong to.
+    label: Department
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - department_id
+      name: BudgetList
+      resource: Budget
+    - direction: toone
+      fks:
+      - manager_id
+      name: manager
+      resource: User
+    type: Department
+  Expense:
+    columns:
+    - label: ' description*'
+      name: description
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(200)
+    - name: category_id
+      template: integer
+      type: INTEGER
+    - name: user_id
+      template: integer
+      type: INTEGER
+    - name: amount
+      required: true
+      template: integer
+      type: INTEGER
+    - name: date
+      required: true
+      type: DATE
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Individual expenses reported by users.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: description
+    hidden: {}
+    home_template: home_template.html
+    info_list: Individual expenses reported by users.
+    label: Expense
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - expense_id
+      name: InvoiceList
+      resource: Invoice
+    - direction: tomany
+      fks:
+      - expense_id
+      name: ReceiptList
+      resource: Receipt
+    - direction: toone
+      fks:
+      - category_id
+      name: category
+      resource: Category
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: Expense
+  ExpenseReport:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: user_id
+      template: integer
+      type: INTEGER
+    - name: report_date
+      required: true
+      type: DATE
+    - name: total_expense
+      required: true
+      template: integer
+      type: INTEGER
+    description: Reports summarizing user expenses.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    hidden: {}
+    home_template: home_template.html
+    info_list: Reports summarizing user expenses.
+    label: ExpenseReport
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - expense_report_id
+      name: ApproverList
+      resource: Approver
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: ExpenseReport
+  Invoice:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: expense_id
+      template: integer
+      type: INTEGER
+    - name: issued_date
+      required: true
+      type: DATE
+    - name: due_date
+      required: true
+      type: DATE
+    - name: amount_due
+      required: true
+      template: integer
+      type: INTEGER
+    - name: paid_status
+      required: true
+      template: text
+      type: VARCHAR(50)
+    description: Invoices associated with expenses.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    hidden: {}
+    home_template: home_template.html
+    info_list: Invoices associated with expenses.
+    label: Invoice
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - expense_id
+      name: expense
+      resource: Expense
+    type: Invoice
+  PaymentMethod:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: user_id
+      template: integer
+      type: INTEGER
+    - name: Type
+      required: true
+      template: text
+      type: VARCHAR(50)
+    - name: details
+      template: text
+      type: VARCHAR(200)
+    description: Payment methods used for expenses.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    hidden: {}
+    home_template: home_template.html
+    info_list: Payment methods used for expenses.
+    label: PaymentMethod
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: PaymentMethod
+  Policy:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(100)
+    - name: user_id
+      template: integer
+      type: INTEGER
+    - name: description
+      template: text
+      type: VARCHAR(300)
+    - name: effective_from
+      required: true
+      type: DATE
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Policies associated with expenses.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    hidden: {}
+    home_template: home_template.html
+    info_list: Policies associated with expenses.
+    label: Policy
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: Policy
+  Receipt:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: expense_id
+      template: integer
+      type: INTEGER
+    - name: receipt_date
+      required: true
+      type: DATE
+    - name: vendor
+      template: text
+      type: VARCHAR(200)
+    - name: total_amount
+      required: true
+      template: integer
+      type: INTEGER
+    description: Receipts linked to expenses.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    hidden: {}
+    home_template: home_template.html
+    info_list: Receipts linked to expenses.
+    label: Receipt
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - expense_id
+      name: expense
+      resource: Expense
+    type: Receipt
+  User:
+    columns:
+    - label: ' username*'
+      name: username
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(50)
+    - name: email
+      required: true
+      template: text
+      type: VARCHAR(100)
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Users who submit expenses.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: username
+    hidden: {}
+    home_template: home_template.html
+    info_list: Users who submit expenses.
+    label: User
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - user_id
+      name: ApproverList
+      resource: Approver
+    - direction: tomany
+      fks:
+      - manager_id
+      name: DepartmentList
+      resource: Department
+    - direction: tomany
+      fks:
+      - user_id
+      name: ExpenseList
+      resource: Expense
+    - direction: tomany
+      fks:
+      - user_id
+      name: ExpenseReportList
+      resource: ExpenseReport
+    - direction: tomany
+      fks:
+      - user_id
+      name: PaymentMethodList
+      resource: PaymentMethod
+    - direction: tomany
+      fks:
+      - user_id
+      name: PolicyList
+      resource: Policy
+    type: User
+  Vendor:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR(150)
+    - name: contact_info
+      template: text
+      type: VARCHAR(200)
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Vendors associated with receipts.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    hidden: {}
+    home_template: home_template.html
+    info_list: Vendors associated with receipts.
+    label: Vendor
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    type: Vendor
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: false
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    mode: tab
+    pick_style: list
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: false

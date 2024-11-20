@@ -1,0 +1,44 @@
+<o-form-layout-manager attr="ExpenseReport" mode="tab" title="EXPENSEREPORT">
+    <div fxFill fxLayout="column" fxLayoutAlign="start">
+        <o-table 
+            attr="ExpenseReportTable" 
+            service="ExpenseReport" 
+            entity="ExpenseReport" 
+            title="EXPENSEREPORT"
+            keys="id"
+            columns="id;user_id;report_date;total_expense" 
+            header-actions="R;D"
+            visible-columns="id;user_id;report_date;total_expense"  
+            sort-columns="id" 
+            query-rows="20" 
+            quick-filter="yes"
+            row-height="medium" 
+            select-all-checkbox="true" 
+            pageable="yes"  
+            auto-adjust="true" 
+            virtual-scroll="yes" 
+            edition-mode="dblclick"
+            horizontal-scroll="yes"
+            show-title="yes"
+            export-button="yes">
+            
+            <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            
+            <o-table-column attr="user_id" title="user_id">
+    <o-table-cell-renderer-service attr="user_id" 
+        service="User" entity="UserType" columns="id;username"
+        parent-keys="id:user_id"
+        value-column="username" keys="user_id"
+        visible-columns="username" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-date-input #report_date attr="report_date" type="date" label="report_date" enabled="yes" required="yes" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            
+            <o-table-column #total_expense attr="total_expense" title="total_expense" type="integer" editable="no" required="yes" content-align="center"></o-table-column>
+            
+            <o-table-context-menu></o-table-context-menu>
+            <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
+        </o-table>
+    </div>
+</o-form-layout-manager>
